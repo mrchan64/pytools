@@ -143,6 +143,38 @@ def generate_array(numVars):
 		resultArray.append(resRow)
 	return resultArray
 
+def display_result(opArray):
+	display=copy.deepcopy(resultArray)
+	fline=copy.deepcopy(results)
+	fline.insert(0,copy.deepcopy(resultantVar))
+	display.insert(0,copy.deepcopy(validVars))
+	for line in range(0,len(display)):
+		display[line].append('|')
+		display[line].append(fline[line])
+		display[line].insert(0,'|')
+		if line==0:
+			ind="#"
+		else:
+			ind=str(line-1)
+		display[line].insert(0,ind)
+	gapLine=[]
+	for ind in range(0,varCount+4):
+		if ind==1 or ind==varCount+2:
+			gapLine.append("+")
+		else:
+			gapLine.append("-")
+	display.insert(1,gapLine)
+
+	displaystr=""
+	count=0
+	for line in display:
+		for let in line:
+			displaystr=displaystr+" "+str(let)
+		displaystr=displaystr+"\n"
+		count+=1
+	print displaystr
+	raw_input("Press Enter to Continue...")
+
 opArray=create_opArray(pre_process(logEq))
 
 resultArray=generate_array(varCount)
@@ -150,36 +182,6 @@ results=[]
 for inputs in resultArray:
 	fin = evaluate_table(opArray, inputs)
 	results.append(fin)
-
-display=copy.deepcopy(resultArray)
-fline=copy.deepcopy(results)
-fline.insert(0,copy.deepcopy(resultantVar))
-display.insert(0,copy.deepcopy(validVars))
-for line in range(0,len(display)):
-	display[line].append('|')
-	display[line].append(fline[line])
-	display[line].insert(0,'|')
-	if line==0:
-		ind="#"
-	else:
-		ind=str(line-1)
-	display[line].insert(0,ind)
-gapLine=[]
-for ind in range(0,varCount+4):
-	if ind==1 or ind==varCount+2:
-		gapLine.append("+")
-	else:
-		gapLine.append("-")
-display.insert(1,gapLine)
-
-displaystr=""
-count=0
-for line in display:
-	for let in line:
-		displaystr=displaystr+" "+str(let)
-	displaystr=displaystr+"\n"
-	count+=1
-print displaystr
 
 copyPasta="\\begin\{center}\n\\begin\{tabular}\{c c c c | c}\n"
 for val in validVars:
@@ -197,5 +199,9 @@ r=Tk()
 r.withdraw()
 r.clipboard_clear()
 r.clipboard_append(copyPasta)
+
+if raw_input("Display Table? (Y/N): ").lower()=="y":
+	display_result(opArray)
+
 r.destroy()
 
